@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موعد عيد الميلاد 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(to bottom, #E0F2F1, #FFF9C4);
+            color: #37474F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #26A69A;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            overflow-x: auto;
+        }
+
+        table,
+        th,
+        td {
+            border: 2px solid #26A69A;
+            padding: 10px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        th {
+            background-color: #26A69A;
+            color: white;
+        }
+
+        td {
+            font-weight: bold;
+            color: #37474F;
+            background-color: #E0F2F1;
+        }
+
+        tr:hover {
+            background-color: #B2DFDB;
+            transform: scale(1.02);
+        }
+
+        .input-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+            position: fixed;
+            top: 60px;
+            right: -350px;
+            width: 300px;
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        .input-container.active {
+            right: 10px;
+        }
+
+        input,
+        button,
+        select {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #FFF9C4;
+        }
+
+        input[type="number"],
+        select {
+            border: 2px solid #26A69A;
+            text-align: center;
+        }
+
+        button {
+            background-color: #26A69A;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #009688;
+        }
+
+        .delete-btn {
+            background-color: #F44336;
+            color: white;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.2em;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            line-height: 1;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #D32F2F;
+        }
+
+        .counters-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 0px;
+            right: 20px;
+            background-color: #26A69A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transition: transform 0.3s ease-in-out, background-color 0.3s ease;
+        }
+
+        .toggle-button.active {
+            transform: rotate(180deg);
+        }
+
+        .toggle-button:hover {
+            background-color: #009688;
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotateX(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(1000px) rotateX(720deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .input-container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="toggle-button" id="toggleButton" onclick="toggleInputContainer()">≡</button>
+    <div class="input-container" id="inputContainer">
+        <input type="text" id="nameInput" placeholder="أدخل الاسم">
+        <input type="number" id="yearInput" placeholder="سنة الميلاد" min="1950" max="2050">
+        <select id="monthInput">
+            <option value="1">يناير</option>
+            <option value="2">فبراير</option>
+            <option value="3">مارس</option>
+            <option value="4">أبريل</option>
+            <option value="5">مايو</option>
+            <option value="6">يونيو</option>
+            <option value="7">يوليو</option>
+            <option value="8">أغسطس</option>
+            <option value="9">سبتمبر</option>
+            <option value="10">أكتوبر</option>
+            <option value="11">نوفمبر</option>
+            <option value="12">ديسمبر</option>
+        </select>
+        <input type="number" id="dayInput" placeholder="يوم الميلاد" min="1" max="31">
+        <input type="time" id="timeInput">
+        <button onclick="addCountdown()">إضافة عداد</button>
+    </div>
+    <div id="countersContainer"></div>
+    <audio id="birthdaySong" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+    <script>
+        // Load saved countdowns from localStorage on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedCountdowns = JSON.parse(localStorage.getItem("countdowns")) || [];
+            savedCountdowns.forEach(countdownData => {
+                addCountdownFromStorage(countdownData.id, countdownData.name, countdownData.year, countdownData.month, countdownData.day, countdownData.time);
+            });
+
+            // Add event listener to the whole document
+            document.addEventListener('click', function(event) {
+                const inputContainer = document.getElementById('inputContainer');
+                const toggleButton = document.getElementById('toggleButton');
+
+                // Check if the clicked element is inside the input container or is the toggle button
+                if (!inputContainer.contains(event.target) && event.target !== toggleButton) {
+                    // If not, and the input container is active, close it
+                    if (inputContainer.classList.contains('active')) {
+                        toggleInputContainer();
+                    }
+                }
+            });
+        });
+
+        function toggleInputContainer() {
+            const container = document.getElementById("inputContainer");
+            const button = document.getElementById("toggleButton");
+            container.classList.toggle("active");
+            button.classList.toggle("active");
+            if (container.classList.contains("active")) {
+                button.textContent = "→";
+            } else {
+                button.textContent = "≡";
+            }
+        }
+
+        function addCountdown() {
+            let name = document.getElementById("nameInput").value.trim();
+            let year = document.getElementById("yearInput").value;
+            let month = document.getElementById("monthInput").value;
+            let day = document.getElementById("dayInput").value;
+            let time = document.getElementById("timeInput").value;
+
+            if (!name || !year || !month || !day || !time) {
+                alert("يرجى إدخال جميع الحقول!");
+                return;
+            }
+
+            // Basic validation for day
+            if (day < 1 || day > 31) {
+                alert("يوم الميلاد غير صالح.");
+                return;
+            }
+
+            // Clear input fields after adding countdown
+            document.getElementById("nameInput").value = "";
+            document.getElementById("yearInput").value = "";
+            document.getElementById("dayInput").value = "";
+            document.getElementById("timeInput").value = "";
+
+            // Generate unique ID for the countdown
+            let countdownId = `countdown-${Date.now()}`;
+
+            // Save countdown data to localStorage
+            saveCountdownToStorage(countdownId, name, year, month, day, time);
+
+            // Add the countdown to the UI
+            addCountdownFromStorage(countdownId, name, year, month, day, time);
+
+            // Close the input container after adding
+            const inputContainer = document.getElementById('inputContainer');
+            if (inputContainer.classList.contains('active')) {
+                toggleInputContainer();
+            }
+        }
+
+        function addCountdownFromStorage(id, name, year, month, day, time) {
+            let birthday = new Date(year, month - 1, day, ...time.split(":"));
+            let now = new Date();
+            let age = now.getFullYear() - year;
+            let currentYearBirthday = new Date(now.getFullYear(), birthday.getMonth(), birthday.getDate());
+
+            if (now < currentYearBirthday) {
+                age--;
+            }
+
+            if (birthday.getFullYear() < now.getFullYear()) {
+                birthday.setFullYear(now.getFullYear());
+            }
+            if (birthday < now) {
+                birthday.setFullYear(birthday.getFullYear() + 1);
+            }
+
+            let countdownDiv = document.createElement("div");
+            countdownDiv.classList.add("container");
+            countdownDiv.id = id;
+            countdownDiv.innerHTML = `
+                <h1 class="title">🎉 العد التنازلي لعيد ميلاد ${name} 🎂</h1>
+                <table>
+                    <tr>
+                        <th>الأيام</th>
+                        <th>الساعات</th>
+                        <th>الدقائق</th>
+                        <th>الثواني</th>
+                        <th>العمر</th>
+                    </tr>
+                    <tr>
+                        <td id="${id}-days">--</td>
+                        <td id="${id}-hours">--</td>
+                        <td id="${id}-minutes">--</td>
+                        <td id="${id}-seconds">--</td>
+                        <td id="${id}-age" style="background-color: #E0F2F1;">${age}</td>
+                    </tr>
+                </table>
+                <button class="delete-btn" onclick="removeCountdown('${id}')">×</button>
+            `;
+            document.getElementById("countersContainer").appendChild(countdownDiv);
+            startCountdown(birthday, id, name, age);
+        }
+
+        function startCountdown(birthday, countdownId, name, age) {
+            function countdown() {
+                let now = new Date();
+                let remainingTime = birthday - now;
+
+                if (remainingTime <= 0) {
+                    document.getElementById(countdownId).querySelector(".title").innerHTML = `🎉 الآن عيد ميلاد ${name}! 🎂 عمره الجديد ${age + 1} سنة 🎉`;
+                    document.getElementById('birthdaySong').play();
+                    party.confetti(document.getElementById(countdownId), {
+                        count: 100,
+                        spread: 60
+                    });
+                    clearInterval(interval);
+                    return;
+                }
+
+                let days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+                document.getElementById(`${countdownId}-days`).innerHTML = String(days).padStart(2, "0");
+                document.getElementById(`${countdownId}-hours`).innerHTML = String(hours).padStart(2, "0");
+                document.getElementById(`${countdownId}-minutes`).innerHTML = String(minutes).padStart(2, "0");
+                document.getElementById(`${countdownId}-seconds`).innerHTML = String(seconds).padStart(2, "0");
+                document.getElementById(`${countdownId}-age`).innerHTML = age;
+            }
+
+            let interval = setInterval(countdown, 1000);
+            countdown();
+        }
+
+        function removeCountdown(id) {
+            let countdownDiv = document.getElementById(id);
+            if (countdownDiv) {
+                countdownDiv.remove();
+
+                // Remove countdown from localStorage
+                let savedCountdowns = JSON.parse(localStorage.getItem("countdowns")) || [];
+                savedCountdowns = savedCountdowns.filter(countdown => countdown.id !== id);
+                localStorage.setItem("countdowns", JSON.stringify(savedCountdowns));
+            }
+        }
+
+        function saveCountdownToStorage(id, name, year, month, day, time) {
+            let countdownData = {
+                id,
+                name,
+                year,
+                month,
+                day,
+                time
+            };
+            let savedCountdowns = JSON.parse(localStorage.getItem("countdowns")) || [];
+            savedCountdowns.push(countdownData);
+            localStorage.setItem("countdowns", JSON.stringify(savedCountdowns));
+        }
+    </script>
+</body>
+
+</html>
